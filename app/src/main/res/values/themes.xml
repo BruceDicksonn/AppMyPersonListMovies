@@ -1,0 +1,25 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.MyMovies" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/red</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.MyMovies.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.MyMovies.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.MyMovies.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="NavigationItemAppearance">
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+</resources>

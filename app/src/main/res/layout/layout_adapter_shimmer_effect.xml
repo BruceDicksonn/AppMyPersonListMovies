@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.facebook.shimmer.ShimmerFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/shimmer"
+    android:layout_width="150dp"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/black">
+
+    <ImageView
+        android:id="@+id/posterItem"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#272727"
+        android:scaleType="centerCrop"/>
+
+</com.facebook.shimmer.ShimmerFrameLayout>
