@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="135dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/black">
+
+        <ImageView
+            android:id="@+id/posterItem"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="#272727"
+            android:scaleType="fitXY"
+            android:src="@drawable/bladerunner_poster" />
+
+</androidx.cardview.widget.CardView>
