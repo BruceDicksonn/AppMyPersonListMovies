@@ -1,15 +1,18 @@
 package com.example.mymovies.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
 import com.example.mymovies.R;
+import com.example.mymovies.view.MainActivity;
 import com.facebook.shimmer.Shimmer;
+import com.ferfalk.simplesearchview.SimpleSearchView;
 
 public class Utils {
 
-    public static String api_key = "b1b6e61282d804726cefb2f18f8a997e";
+    public static String api_key = "XXXXXXXXXXXXXXXXXXXXXXXXX";
 
     public static Shimmer createNewShimmer(Context context){
 

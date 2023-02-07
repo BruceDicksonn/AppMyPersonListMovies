@@ -10,6 +10,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' } // implementação do simple search view
     }
 }
 rootProject.name = "MyMovies"

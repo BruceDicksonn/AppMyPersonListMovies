@@ -36,8 +36,12 @@ dependencies {
     // Lib usada para aplicar o efeito Shimmer para carregamento de itens
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
+    // Lib usada para uma barra de pesquisa personalizada
+    implementation 'com.github.Ferfalk:SimpleSearchView:0.2.0'
+
     // lib usada para serializar JSON de uma forma simples e prática
     implementation 'com.google.code.gson:gson:2.8.6'
+
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'

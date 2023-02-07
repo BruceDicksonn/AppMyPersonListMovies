@@ -4,9 +4,13 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.transition.Slide;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 
 import com.example.mymovies.R;
+import com.ferfalk.simplesearchview.SimpleSearchView;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;
@@ -23,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    DrawerLayout drawer;
+    private NavigationView navigationView;
+    private SimpleSearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
-        DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
+        drawer = binding.drawerLayout;
+        navigationView = binding.navView;
+        searchView = binding.appBarMain.searchView;
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -48,10 +56,49 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
     }
 
+    public void showNavigationComponents(){
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    public void hideNavigationComponents(){
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        MenuItem item = menu.findItem(R.id.search);
+        searchView.setMenuItem(item);
+
+        /*Eventos de inicialização e encerramento do searchview*/
+        searchView.setOnSearchViewListener(new SimpleSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                hideNavigationComponents();
+                menu.findItem(R.id.search).setVisible(false);
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+                Log.i("Search", "Fechado");
+                showNavigationComponents();
+                menu.findItem(R.id.search).setVisible(true);
+            }
+
+            @Override
+            public void onSearchViewShownAnimation() {}
+
+            @Override
+            public void onSearchViewClosedAnimation() {}
+
+        });
+
+        /**Eventos de Query text listener**/
+
         return true;
     }
 

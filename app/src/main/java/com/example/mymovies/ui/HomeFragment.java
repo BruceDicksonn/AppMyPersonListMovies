@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mymovies.R;
 import com.example.mymovies.adapters.AdapterFilme;
 import com.example.mymovies.asyncTasks.AsyncTaskFetchMovies;
+import com.example.mymovies.dal.DalFilmes;
 import com.example.mymovies.databinding.FragmentHomeBinding;
 import com.example.mymovies.listeners.EndlessRecyclerViewScrollListener;
 import com.example.mymovies.model.Filme;
@@ -83,12 +86,12 @@ public class HomeFragment extends Fragment {
             }
         };
 
-
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        binding.recyclerHome.clearOnScrollListeners(); // evitar vazamento de memoria
+        if(binding != null) binding.recyclerHome.clearOnScrollListeners(); // evitar vazamento de memoria
+        return;
     }
 }

@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,13 +25,17 @@ public class DalFilmes {
     static final String API_KEY = "api_key";
     static final String LANGUAGE = "language";
     static final String PAGE = "page";
+    static final String QUERY = "query";
     static final String REQUEST_IMAGE_PATH = "https://image.tmdb.org/t/p/w500/";
 
     static final String REQUEST_POPULAR_MOVIES = "https://api.themoviedb.org/3/movie/popular?";
     static final String REQUEST_GENRES_MOVIES = "https://api.themoviedb.org/3/genre/movie/list?";
+    static final String REQUEST_SEARCH_MOVIES = "https://api.themoviedb.org/3/search/movie?";
+    /*dps procurar por search multi na api para pesquisar filmes e series ao mesmo tempo*/
 
     static ArrayList<JSONObject> listMovies = new ArrayList<>();
     static ArrayList<JSONObject> listGenres = new ArrayList<>();
+    static ArrayList<JSONObject> listFoundMovies = new ArrayList<>(); // filmes encontrados
 
     public static ArrayList<JSONObject> getMovies(int page){
 
@@ -51,6 +56,75 @@ public class DalFilmes {
     private static void initRequests(int page){
         requestPopularMovies(page);
         requestGenresMovies();
+    }
+
+    public static String searchMovie(String query){
+
+        HttpURLConnection httpURLConnection = null;
+        BufferedReader reader = null;
+        Uri builtUri = null;
+        String jsonResponse = null;
+
+        try {
+
+            builtUri = Uri.parse(REQUEST_SEARCH_MOVIES).buildUpon()
+                    .appendQueryParameter(API_KEY,Utils.api_key)
+                    .appendQueryParameter(LANGUAGE,"pt-br")
+                    .appendQueryParameter(QUERY,query).
+                    build();
+
+            URL urlRequest = new URL(builtUri.toString());
+
+            httpURLConnection = (HttpURLConnection) urlRequest.openConnection();
+            httpURLConnection.setRequestMethod("GET");
+            httpURLConnection.connect();
+
+            InputStream inputStream = httpURLConnection.getInputStream();
+
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            StringBuilder stringBuilder = new StringBuilder();
+            String row = "";
+
+            while((row = reader.readLine()) != null) {
+
+                stringBuilder.append(row);
+                stringBuilder.append("\n");
+
+            }
+
+            if(stringBuilder.length() == 0) return null;
+
+            jsonResponse = stringBuilder.toString();
+
+            JSONObject jsonObject = new JSONObject(jsonResponse);
+            JSONArray  jsonArray  = jsonObject.getJSONArray("results");
+
+            NetworkUtils.fillList(jsonArray, listFoundMovies);
+            Log.i("Search", jsonResponse);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if(httpURLConnection != null) {
+                httpURLConnection.disconnect();
+            }
+
+            if(reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return jsonResponse;
+
     }
 
     private static String requestPopularMovies(int page){
@@ -100,8 +174,6 @@ public class DalFilmes {
             JSONArray jsonArray = jsonObject.getJSONArray("results");
 
             NetworkUtils.fillList(jsonArray, listMovies);
-
-            Log.d("Script", jsonResponse);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
