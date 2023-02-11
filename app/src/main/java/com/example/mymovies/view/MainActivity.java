@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.mymovies.R;
+import com.example.mymovies.utils.Utils;
 import com.ferfalk.simplesearchview.SimpleSearchView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -79,14 +80,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSearchViewShown() {
                 hideNavigationComponents();
-                menu.findItem(R.id.search).setVisible(false);
+                Utils.hideMenuItems(menu);
             }
 
             @Override
             public void onSearchViewClosed() {
-                Log.i("Search", "Fechado");
                 showNavigationComponents();
-                menu.findItem(R.id.search).setVisible(true);
+                Utils.showMenuItems(menu);
             }
 
             @Override

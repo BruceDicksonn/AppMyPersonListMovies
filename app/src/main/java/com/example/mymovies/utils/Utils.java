@@ -2,6 +2,7 @@ package com.example.mymovies.utils;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.Menu;
 
 import androidx.core.content.ContextCompat;
 
@@ -25,6 +26,18 @@ public class Utils {
                 .build();
 
         return shimmer;
+    }
+
+    public static void hideMenuItems(Menu menu){
+        for(int i=0; i < menu.size();i++){
+            menu.getItem(i).setVisible(false);
+        }
+    }
+
+    public static void showMenuItems(Menu menu){
+        for(int i=0; i < menu.size();i++){
+            menu.getItem(i).setVisible(true);
+        }
     }
 
 }
