@@ -11,9 +11,11 @@ import com.example.mymovies.view.MainActivity;
 import com.facebook.shimmer.Shimmer;
 import com.ferfalk.simplesearchview.SimpleSearchView;
 
+import java.util.ArrayList;
+
 public class Utils {
 
-    public static String api_key = "XXXXXXXXXXXXXXXXXXXXXXXXX";
+    public static String api_key = "b1b6e61282d804726cefb2f18f8a997e";
 
     public static Shimmer createNewShimmer(Context context){
 

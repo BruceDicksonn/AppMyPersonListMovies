@@ -6,10 +6,10 @@ public class Serie implements Serializable {
 
     private String backdrop_path;
     private String first_air_date;
-    private String[] genre_ids;
+    private String genre_ids;
     private long id;
     private String name;
-    private String origin_country;
+    private String[] origin_country;
     private String original_language;
     private String original_name;
     private String overview;
@@ -18,7 +18,7 @@ public class Serie implements Serializable {
     private double vote_average;
     private long vote_count;
 
-    public Serie(String backdrop_path, String first_air_date, String[] genre_ids, long id, String name, String origin_country, String original_language, String original_name, String overview, double popularity, String poster_path, double vote_average, long vote_count) {
+    public Serie(String backdrop_path, String first_air_date, String genre_ids, long id, String name, String[] origin_country, String original_language, String original_name, String overview, double popularity, String poster_path, double vote_average, long vote_count) {
         this.backdrop_path = backdrop_path;
         this.first_air_date = first_air_date;
         this.genre_ids = genre_ids;
@@ -50,11 +50,11 @@ public class Serie implements Serializable {
         this.first_air_date = first_air_date;
     }
 
-    public String[] getGenre_ids() {
+    public String getGenre_ids() {
         return genre_ids;
     }
 
-    public void setGenre_ids(String[] genre_ids) {
+    public void setGenre_ids(String genre_ids) {
         this.genre_ids = genre_ids;
     }
 
@@ -74,11 +74,11 @@ public class Serie implements Serializable {
         this.name = name;
     }
 
-    public String getOrigin_country() {
+    public String[] getOrigin_country() {
         return origin_country;
     }
 
-    public void setOrigin_country(String origin_country) {
+    public void setOrigin_country(String[] origin_country) {
         this.origin_country = origin_country;
     }
 

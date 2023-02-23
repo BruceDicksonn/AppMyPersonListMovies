@@ -9,14 +9,14 @@ import com.example.mymovies.model.Filme;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class AsyncTaskFetchMovies extends AsyncTask<Void,Void,ArrayList<Filme>> {
+public class AsyncTaskFetchFilmes extends AsyncTask<Void,Void,ArrayList<Filme>> {
 
     WeakReference<AdapterFilme> mAdapterFilme;
     WeakReference<ArrayList<Filme>> mList;
     int current_page;
 
 
-    public AsyncTaskFetchMovies(AdapterFilme adapter, ArrayList<Filme> arrayList, int page) {
+    public AsyncTaskFetchFilmes(AdapterFilme adapter, ArrayList<Filme> arrayList, int page) {
         this.mAdapterFilme = new WeakReference<>(adapter);
         this.mList = new WeakReference<>(arrayList);
         this.current_page = page;
@@ -30,7 +30,7 @@ public class AsyncTaskFetchMovies extends AsyncTask<Void,Void,ArrayList<Filme>> 
     @Override
     protected ArrayList<Filme> doInBackground(Void... voids) {
         ControllerFilmes controllerFilmes = new ControllerFilmes();
-        return controllerFilmes.getPopularMovies(current_page);
+        return controllerFilmes.getAllMovies(current_page);
     }
 
 
@@ -41,7 +41,6 @@ public class AsyncTaskFetchMovies extends AsyncTask<Void,Void,ArrayList<Filme>> 
 
         mList.get().addAll(arrayList);
         mAdapterFilme.get().notifyDataSetChanged();
-        Log.i("AsyncTask","123");
 
     }
 }

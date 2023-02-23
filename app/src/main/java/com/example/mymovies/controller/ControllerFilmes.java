@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class ControllerFilmes {
 
-    public ArrayList<Filme> getPopularMovies(int page) {
+    public ArrayList<Filme> getAllMovies(int page) {
 
         ArrayList<Filme> filmes = new ArrayList<>();
         ArrayList<JSONObject> listMovies = DalFilmes.getMovies(page);

@@ -19,41 +19,113 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class DalSeries {
+public class DalPopulares {
 
     static final String API_KEY = "api_key";
     static final String LANGUAGE = "language";
     static final String PAGE = "page";
+    static final String QUERY = "query";
     static final String REQUEST_IMAGE_PATH = "https://image.tmdb.org/t/p/w500/";
 
-    static final String REQUEST_POPULAR_SERIES = "https://api.themoviedb.org/3/tv/popular?";
-    static final String REQUEST_GENRES_SERIES = "https://api.themoviedb.org/3/genre/tv/list?";
+    static final String REQUEST_POPULAR_MOVIES = "https://api.themoviedb.org/3/trending/all/day?";
+    static final String REQUEST_GENRES_MOVIES = "https://api.themoviedb.org/3/genre/movie/list?";
+    static final String REQUEST_SEARCH_MOVIES = "https://api.themoviedb.org/3/search/movie?";
 
-    static ArrayList<JSONObject> listSeries = new ArrayList<>();
+    static ArrayList<JSONObject> listMovies = new ArrayList<>();
     static ArrayList<JSONObject> listGenres = new ArrayList<>();
+    static ArrayList<JSONObject> listFoundMovies = new ArrayList<>(); // filmes encontrados
 
-    public static ArrayList<JSONObject> getSeries(int page){
+    public static ArrayList<JSONObject> getTrendingItems(int page){
 
-        if(listSeries.size() != 0 || listGenres.size() != 0) {
-            listSeries.clear();
+        if(listMovies.size() != 0 || listGenres.size() != 0) {
+            listMovies.clear();
             listGenres.clear();
         }
 
         initRequests(page);
 
-        NetworkUtils.updateLinksFromPaths(listSeries, REQUEST_IMAGE_PATH);
-        NetworkUtils.updateArrayGenres(listSeries , listGenres);
+        NetworkUtils.updateLinksFromPaths(listMovies, REQUEST_IMAGE_PATH);
+        NetworkUtils.updateArrayGenres(listMovies, listGenres);
 
-        return listSeries;
+        return listMovies;
 
     }
 
     private static void initRequests(int page){
-        requestPopularSeries(page);
-        requestGenresSeries();
+        requestTrendingItems(page);
+        requestGenresMovies();
     }
 
-    private static String requestPopularSeries(int page){
+    public static String searchPopular(String query){
+
+        HttpURLConnection httpURLConnection = null;
+        BufferedReader reader = null;
+        Uri builtUri = null;
+        String jsonResponse = null;
+
+        try {
+
+            builtUri = Uri.parse(REQUEST_SEARCH_MOVIES).buildUpon()
+                    .appendQueryParameter(API_KEY, Utils.api_key)
+                    .appendQueryParameter(LANGUAGE,"pt-br")
+                    .appendQueryParameter(QUERY,query).
+                    build();
+
+            URL urlRequest = new URL(builtUri.toString());
+
+            httpURLConnection = (HttpURLConnection) urlRequest.openConnection();
+            httpURLConnection.setRequestMethod("GET");
+            httpURLConnection.connect();
+
+            InputStream inputStream = httpURLConnection.getInputStream();
+
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            StringBuilder stringBuilder = new StringBuilder();
+            String row = "";
+
+            while((row = reader.readLine()) != null) {
+
+                stringBuilder.append(row);
+                stringBuilder.append("\n");
+
+            }
+
+            if(stringBuilder.length() == 0) return null;
+
+            jsonResponse = stringBuilder.toString();
+
+            JSONObject jsonObject = new JSONObject(jsonResponse);
+            JSONArray jsonArray  = jsonObject.getJSONArray("results");
+
+            NetworkUtils.fillList(jsonArray, listFoundMovies);
+            Log.i("Search", jsonResponse);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } finally {
+            if(httpURLConnection != null) {
+                httpURLConnection.disconnect();
+            }
+
+            if(reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return jsonResponse;
+
+    }
+
+    private static String requestTrendingItems(int page){
 
         HttpURLConnection httpURLConnection = null;
         BufferedReader reader = null;
@@ -63,10 +135,10 @@ public class DalSeries {
         try {
 
 
-            builtUri = Uri.parse(REQUEST_POPULAR_SERIES).buildUpon()
+            builtUri = Uri.parse(REQUEST_POPULAR_MOVIES).buildUpon()
                     .appendQueryParameter(API_KEY, Utils.api_key)
-                    .appendQueryParameter(LANGUAGE,"pt-BR")
                     .appendQueryParameter(PAGE, String.valueOf(page))
+                    .appendQueryParameter(LANGUAGE,"pt-BR")
                     .build();
 
             URL urlRequest = new URL(builtUri.toString());
@@ -99,9 +171,7 @@ public class DalSeries {
             JSONObject jsonObject = new JSONObject(jsonResponse);
             JSONArray jsonArray = jsonObject.getJSONArray("results");
 
-            NetworkUtils.fillList(jsonArray, listSeries);
-
-            Log.d("Script", jsonResponse);
+            NetworkUtils.fillList(jsonArray, listMovies);
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -123,10 +193,12 @@ public class DalSeries {
 
         }
 
+        Log.e("Populares", jsonResponse);
+
         return jsonResponse;
     }
 
-    private static String requestGenresSeries(){
+    private static String requestGenresMovies(){
 
         HttpURLConnection httpURLConnection = null;
         BufferedReader reader = null;
@@ -134,7 +206,7 @@ public class DalSeries {
 
         try {
 
-            Uri uri = Uri.parse(REQUEST_GENRES_SERIES).buildUpon()
+            Uri uri = Uri.parse(REQUEST_GENRES_MOVIES).buildUpon()
                     .appendQueryParameter(API_KEY,Utils.api_key)
                     .build();
 
@@ -192,5 +264,6 @@ public class DalSeries {
         return json;
 
     }
+
 
 }

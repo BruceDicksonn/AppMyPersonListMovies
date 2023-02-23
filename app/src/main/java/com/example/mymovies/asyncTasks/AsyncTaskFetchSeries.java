@@ -1,12 +1,29 @@
 package com.example.mymovies.asyncTasks;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
+import android.util.Log;
 
+import com.example.mymovies.adapters.AdapterFilme;
+import com.example.mymovies.adapters.AdapterSerie;
 import com.example.mymovies.controller.ControllerSeries;
+import com.example.mymovies.model.Filme;
+import com.example.mymovies.model.Serie;
 
-public class AsyncTaskFetchSeries extends AsyncTask<String,Void,String> {
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
+public class AsyncTaskFetchSeries  extends AsyncTask<Void,Void, ArrayList<Serie>> {
 
+    WeakReference<AdapterSerie> mAdapterSerie;
+    WeakReference<ArrayList<Serie>> mList;
+    int current_page;
+
+    public AsyncTaskFetchSeries(AdapterSerie adapter, ArrayList<Serie> arrayList, int page) {
+        this.mAdapterSerie = new WeakReference<>(adapter);
+        this.mList = new WeakReference<>(arrayList);
+        this.current_page = page;
+    }
 
     @Override
     protected void onPreExecute() {
@@ -14,16 +31,20 @@ public class AsyncTaskFetchSeries extends AsyncTask<String,Void,String> {
     }
 
     @Override
-    protected String doInBackground(String... strings) {
+    protected ArrayList<Serie> doInBackground(Void... voids) {
 
         ControllerSeries controller = new ControllerSeries();
-        String json = controller.getPopularSeries();
+        return controller.getPopularSeries(current_page);
 
-        return json;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
+    protected void onPostExecute(ArrayList<Serie> arrayList) {
+        super.onPostExecute(arrayList);
+
+        mList.get().addAll(arrayList);
+        mAdapterSerie.get().notifyDataSetChanged();
+
     }
 }
